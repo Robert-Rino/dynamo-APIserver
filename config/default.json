@@ -1,15 +1,14 @@
 {
-  // Customer module configs
-  "Customer": {
-    "dbConfig": {
-      "host": "localhost",
-      "port": 5984,
-      "dbName": "customers"
-    },
-    "credit": {
-      "initialLimit": 100,
-      // Set low for development
-      "initialDays": 1
-    }
+  "JWT": {
+    "secret": "1234"
+  },
+  "VCPE_ACCOUNT_TEST": {
+    "username": "rino",
+    "password": "test1234"
+  },
+  "AWS_CREDENTIALS":{
+    "accessKeyId":"AKIAJ7JCPYOJCN3SMTXA",
+    "secretAccessKey":"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",
+    "region":"ap-northeast-1"
   }
 }
