@@ -10,13 +10,17 @@ let cors = require('cors');
 const config = require('config');
 const hasJWTSecret = config.has('JWT.secret');
 
+let generate = require('./lib/generate.js');
+let test = generate.video();
+console.log(test);
+
 let routes = require('./routes/index');
 let auth = require('./routes/auth.js');
 let users = require('./routes/users');
 
 let authenticate = hasJWTSecret ?
-  expressJwt({secret: config.get('JWT.secret')}):
-  expressJwt({secret: process.env.JWT_SECRET});
+   expressJwt({ secret: config.get('JWT.secret') }) :
+   expressJwt({ secret: process.env.JWT_SECRET });
 let app = express();
 
 app.use(cors());
