@@ -10,9 +10,11 @@ let cors = require('cors');
 const config = require('config');
 const hasJWTSecret = config.has('JWT.secret');
 
-let generate = require('./lib/generate.js');
-let test = generate.video();
-console.log(test);
+let dynamo = require('./lib/generate.js');
+
+// let qResult = dynamo.query(70664);
+// let test = dynamo.save(1);
+// console.log(test);
 
 let routes = require('./routes/index');
 let auth = require('./routes/auth.js');
