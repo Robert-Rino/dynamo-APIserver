@@ -18,7 +18,7 @@ let dynamo = require('./lib/generate.js');
 
 let routes = require('./routes/index');
 let auth = require('./routes/auth.js');
-let users = require('./routes/users');
+let users = require('./routes/users.js');
 
 let authenticate = hasJWTSecret ?
    expressJwt({ secret: config.get('JWT.secret') }) :
@@ -28,27 +28,20 @@ let app = express();
 app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 
-// app.use(logger('dev'));
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(cookieParser());
-// app.use(express.static(path.join(__dirname, 'public')));
-
-// return 401 when no authorization
-app.use('/api', authenticate, (err, req, res, next) => {
-  if (err.name === 'UnauthorizedError') {
-    res.status(401).send('Unauthorized or invalid token.');
-  }
-});
+// // return 401 when no authorization
+// app.use('/api', authenticate, (err, req, res, next) => {
+//   if (err.name === 'UnauthorizedError') {
+//     res.status(401).send('Unauthorized or invalid token.');
+//   }
+// });
 
 app.use((req, res, next) => {
   next();
 });
 
-app.use('/', auth);
-app.use('/api/v1', routes);
+app.use('/', routes);
 app.use('/users', users);
 
 module.exports = app;
