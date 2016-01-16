@@ -1,0 +1,14 @@
+{
+  "JWT": {
+    "secret": "..."
+  },
+  "VCPE_ACCOUNT_TEST": {
+    "username": "...",
+    "password": "..."
+  },
+  "AWS_CREDENTIALS":{
+    "accessKeyId":"...",
+    "secretAccessKey":"...",
+    "region":"ap-northeast-1"
+  }
+}
