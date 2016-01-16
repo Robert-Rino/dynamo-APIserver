@@ -30,7 +30,7 @@ debug(`Now in ${process.env.NODE_ENV} mode!`);
 
 let userPlay = vogels.define('userPlay', {
   hashKey: 'userId',
-  rangeKey: 'courseId',
+  rangeKey: 'timestamp',
   timestamps: false,
   schema: {
     userId: Joi.number().required(),
