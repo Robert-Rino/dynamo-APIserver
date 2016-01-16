@@ -8,17 +8,18 @@ let generater = require('../lib/generate.js');
 let router = express.Router();
 
 // fake data
-let data = { 1:{
-  userId: 123,
-  courseId: 1,
-  count: 100,
-  timestamp: 99999,
-},
-2:{
+let data = {
+  2:{
   userId: 122,
   courseId: 2,
   count: 200,
-  timestamp: 11111,
+  timestamp: 33333,
+},
+  1:{
+  userId: 122,
+  courseId: 2,
+  count: 200,
+  timestamp: 44444,
 },
 };
 
@@ -27,8 +28,26 @@ router.get('/', function(req, res) {
   res.send('user.js page').status(200);
 });
 
-// data will be a json contain many data
-router.post('/playRecord', (req, res) => {
+/* GET users listing. */
+router.get('/read/playrecord/:uid/:cid/:time', function(req, res) {
+  let userId = req.params.uid;
+  let courseId = req.params.cid;
+  let timestamp = req.params.time;
+  
+  // uPlayModel
+  //   .query(userId)
+  //   .where(courseId).equals()
+  //   .filter('tags').contains('cloud'),
+  //   exec();
+  res.json({
+    uid:userId,
+    cid:courseId,
+    time:timestamp,
+  }).status(200);
+});
+
+// data will be a object contain many object
+router.post('/save/playrecord', (req, res) => {
   let dataBody = req.body;
   for (let i in dataBody) {
     uPlayModel.create(dataBody[i], function(err, post) {
@@ -39,7 +58,7 @@ router.post('/playRecord', (req, res) => {
       });
   }
 
-  res.send().status(200);
+  res.status(201).send('Created');
 });
 
 module.exports = router;
