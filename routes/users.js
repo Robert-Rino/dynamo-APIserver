@@ -1,6 +1,8 @@
 'use strict';
 let express = require('express');
 let _  = require('lodash');
+let util = require('util');
+let debug = require('debug')('routesUsers');
 
 let uPlayModel = require('../models/userPlay.js');
 let generater = require('../lib/generate.js');
@@ -30,20 +32,22 @@ router.get('/', function(req, res) {
 
 /* GET users listing. */
 router.get('/read/playrecord/:uid/:cid/:time', function(req, res) {
-  let userId = req.params.uid;
-  let courseId = req.params.cid;
-  let timestamp = req.params.time;
-  
-  // uPlayModel
-  //   .query(userId)
-  //   .where(courseId).equals()
-  //   .filter('tags').contains('cloud'),
-  //   exec();
-  res.json({
-    uid:userId,
-    cid:courseId,
-    time:timestamp,
-  }).status(200);
+  let userId = parseInt(req.params.uid);
+  let courseId = parseInt(req.params.cid);
+  let timestamp = parseInt(req.params.time);
+  uPlayModel
+    .query(userId)
+    .where('timestamp').gt(timestamp)
+    .filter('courseId').equals(courseId)
+    .exec((err, resp) => {
+      if (err) {
+        debug(err);
+        console.log('Error running query', err);
+      } else {
+        // console.log(_.pluck(resp.Items, 'attrs'));
+        res.status(200).send(_.pluck(resp.Items, 'attrs'));
+      }
+    });
 });
 
 // data will be a object contain many object
