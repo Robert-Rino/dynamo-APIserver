@@ -2,6 +2,7 @@
 let express = require('express');
 let _  = require('lodash');
 let util = require('util');
+let Joi = require('joi');
 let debug = require('debug')('routesUsers');
 
 let uPlayModel = require('../models/userPlay.js');
@@ -13,15 +14,8 @@ let router = express.Router();
 let data = {
   2:{
   userId: 122,
-  courseId: 2,
-  count: 200,
-  timestamp: 33333,
-},
-  1:{
-  userId: 122,
-  courseId: 2,
-  count: 200,
-  timestamp: 44444,
+  courseId: 5,
+  count: 120,
 },
 };
 
@@ -67,25 +61,47 @@ router.get('/read/playrecord/:uid/:cid/:time', function(req, res) {
         debug(err);
         console.log('Error running query', err);
       } else {
-        // console.log(_.pluck(resp.Items, 'attrs'));
         res.status(200).send(_.pluck(resp.Items, 'attrs'));
       }
     });
 });
 
-// data will be a object contain many object
-router.post('/save/playrecord', (req, res) => {
+/* data will be an array contain many object
+example :
+[
+  2:{
+  userId: 122,
+  courseId: 2,
+  count: 200,
+  timestamp: 33333,
+},
+  1:{
+  userId: 122,
+  courseId: 2,
+  count: 200,
+  timestamp: 44444,
+},
+];
+*/
+router.post('/save/playrecord', (req, res, next) => {
   let dataBody = req.body;
+  let insertArr = [];
   for (let i in dataBody) {
-    uPlayModel.create(dataBody[i], function(err, post) {
-        if (err) {
-          console.log(err);
-          res.send().status(500);
-        }
-      });
+    insertArr.push(dataBody[i]);
   }
 
-  res.status(201).send('Created');
+  req.insertArr = insertArr;
+  next();
+}, (req, res) => {
+  uPlayModel.create(req.insertArr, { overwrite: false }, function(err, post) {
+        if (err) {
+          console.log(err);
+          debug(err);
+          return res.sendStatus(400);
+        }
+
+        res.sendStatus(200);
+      });
 });
 
 module.exports = router;
