@@ -5,6 +5,13 @@ let util = require('util');
 let Joi = require('joi');
 let debug = require('debug')('routesUsers');
 
+const schema = {
+  userId: Joi.number().required(),
+  courseId: Joi.number().required(),
+  count: Joi.number().required(),
+  timestamp: Joi.number().required(),
+};
+
 let uPlayModel = require('../models/userPlay.js');
 let generater = require('../lib/generate.js');
 
@@ -86,20 +93,22 @@ example :
 router.post('/save/playrecord', (req, res, next) => {
   let dataBody = req.body;
   let insertArr = [];
+
   for (let i in dataBody) {
-    insertArr.push(dataBody[i]);
+    Joi.validate(dataBody[i], schema, (err, value) => {
+      if (err) {
+        res.sendStatus(400);
+        return next([err]);
+      }
+
+      insertArr.push(dataBody[i]);
+    });
   }
 
   req.insertArr = insertArr;
   next();
 }, (req, res) => {
   uPlayModel.create(req.insertArr, { overwrite: false }, function(err, post) {
-        if (err) {
-          console.log(err);
-          debug(err);
-          return res.sendStatus(400);
-        }
-
         res.sendStatus(200);
       });
 });
