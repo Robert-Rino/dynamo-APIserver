@@ -2,7 +2,7 @@
 const vogels = require('vogels');
 const Joi = require('joi');
 const config = require('config');
-const debug = require('debug')('configure');
+const debug = require('debug')('userPlayModel');
 
 // Loading credentials from JSON file
 // vogels.AWS.config.loadFromPath(`./config/credentials.json`);
